@@ -14,7 +14,7 @@ It uses the ArcGIS Server Administrator API (`/arcgis/admin`, port 6443). It doe
 
 ## Requirements
 
-- Python with the `requests` package:
+- Python 3 with the `requests` package:
 
 ```
 pip install -r requirements.txt
@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 - An ArcGIS Server site you can reach on port 6443, and an admin or publisher account.
 
-The script currently needs Python 2. See the open issues for Python 3 support.
+The script runs on Python 3.
 
 ## Usage
 
