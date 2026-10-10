@@ -2,13 +2,8 @@
 #  ServiceName, Folder, Type, Status, Min Instances, Max Instances, KML,
 #  WMS, Max Records, Cluster, Cache Directory, Jobs Directory, Output Directory
 
-# encoding=utf8
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
-
 # For HTTP calls
-import httplib, urllib, json, requests
+import json, requests
 
 # For system tools
 import sys
@@ -19,15 +14,15 @@ import getpass
 def main(argv=None):
     
     # Ask for admin/publisher user name and password
-    username = raw_input("Enter user name: ")
+    username = input("Enter user name: ")
     password = getpass.getpass("Enter password: ")
 
     # Ask for server name & port
-    serverName = raw_input("Enter server name: ")
+    serverName = input("Enter server name: ")
     serverPort = 6443
 
     # Get the location and the name of the file to be created
-    resultFile = raw_input("Output File: ")
+    resultFile = input("Output File: ")
 
     # Get a token
     token = getToken(username, password, serverName, serverPort)
@@ -43,7 +38,7 @@ def main(argv=None):
 
     # Read response
     if (response.status_code != 200):
-        print "Could not read folder information."
+        print("Could not read folder information.")
         return
     else:
         # Deserialize response into Python object
@@ -53,14 +48,15 @@ def main(argv=None):
         folders = dataObj["folders"]
 
         #Remove the System and Utilities folders
-        folders.remove("System")
+        if "System" in folders:
+            folders.remove("System")
         #folders.remove("Utilities")
 
         #Add an entry for the root folder
         folders.append("")
 
         #Create the summary file of services
-        serviceResultFile = open(resultFile,'w')
+        serviceResultFile = open(resultFile, 'w', encoding='utf-8')
         serviceResultFile.write("ServiceName,Folder,Type,Status,Min Instances,Max Instances,FeatureService,kml,wms,Max Records,Cluster,Cache Directory,Jobs Directory,Output Directory" + "\n")
 
         #Loop on the found folders and discover the services and write the service information
@@ -79,7 +75,7 @@ def main(argv=None):
 
             # Read response
             if (response.status_code != 200):
-                print "Could not read folder information."
+                print("Could not read folder information.")
                 return
             else:
                 # Deserialize response into Python object
@@ -399,7 +395,7 @@ def getToken(username, password, serverName, serverPort):
       
     # Read response
     if (response.status_code != 200):
-        print "Error while fetching tokens from admin URL. Please check the URL and try again."
+        print("Error while fetching tokens from admin URL. Please check the URL and try again.")
         return
     else:
         # Extract the token from it
